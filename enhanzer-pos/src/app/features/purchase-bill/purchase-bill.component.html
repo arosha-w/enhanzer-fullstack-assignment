@@ -1,0 +1,94 @@
+<header class="topbar">
+  <div>
+    <h1>Purchase Bill</h1>
+    <p>Enter Information for the Purchase Bill</p>
+  </div>
+  <div class="user">
+    <span>{{ auth.session()?.email }}</span>
+    <button type="button" (click)="auth.logout()">Logout</button>
+  </div>
+</header>
+
+<div class="layout">
+  <section class="panel">
+    <h2 class="tab">Items</h2>
+
+    <form [formGroup]="form" (ngSubmit)="addItem()" novalidate>
+      <div class="grid">
+        <div class="cell">
+          <app-autocomplete label="Item*" placeholder="Search item" formControlName="item" [options]="itemOptions" />
+          <app-field-error [control]="form.controls.item" label="Item" />
+        </div>
+
+        <div class="cell">
+          <label for="batch">Batch*</label>
+          <select id="batch" formControlName="batch">
+            <option value="" disabled>{{ loadingLocations() ? 'Loading...' : 'Select batch' }}</option>
+            @for (l of locations(); track l.locationCode) {
+              <option [value]="l.locationName">{{ l.locationName }}</option>
+            }
+          </select>
+          <app-field-error [control]="form.controls.batch" label="Batch" />
+          @if (locationsError(); as e) {
+            <small class="error">{{ e }} <button type="button" class="link" (click)="loadLocations()">Retry</button></small>
+          }
+        </div>
+
+        <div class="cell">
+          <label for="cost">Standard Cost*</label>
+          <input id="cost" type="number" min="0" step="0.01" formControlName="standardCost" />
+          <app-field-error [control]="form.controls.standardCost" label="Standard cost" />
+        </div>
+
+        <div class="cell">
+          <label for="price">Standard Price*</label>
+          <input id="price" type="number" min="0" step="0.01" formControlName="standardPrice" />
+          <app-field-error [control]="form.controls.standardPrice" label="Standard price" />
+        </div>
+
+        <div class="cell">
+          <label for="margin">Margin</label>
+          <input id="margin" readonly [value]="margin().toFixed(2)" />
+        </div>
+
+        <div class="cell">
+          <label for="qty">Qty*</label>
+          <input id="qty" type="number" min="1" step="1" formControlName="qty" />
+          <app-field-error [control]="form.controls.qty" label="Qty" />
+        </div>
+
+        <div class="cell">
+          <label for="free">Free Qty</label>
+          <input id="free" type="number" min="0" step="1" formControlName="freeQty" />
+          <app-field-error [control]="form.controls.freeQty" label="Free qty" />
+        </div>
+
+        <div class="cell">
+          <label for="disc">Discount (%)</label>
+          <input id="disc" type="number" min="0" max="100" step="0.01" formControlName="discount" />
+          <app-field-error [control]="form.controls.discount" label="Discount" />
+        </div>
+
+        <div class="cell">
+          <label for="tc">Total Cost</label>
+          <input id="tc" readonly [value]="totalCost().toFixed(2)" />
+        </div>
+
+        <div class="cell">
+          <label for="ts">Total Selling</label>
+          <input id="ts" readonly [value]="totalSelling().toFixed(2)" />
+        </div>
+
+        <div class="cell action">
+          <button type="submit" class="add">Add +</button>
+        </div>
+      </div>
+    </form>
+
+    <app-bill-items-table [items]="items()" (remove)="removeItem($event)" />
+  </section>
+
+  <aside class="panel summary">
+    <app-item-summary [items]="items()" />
+  </aside>
+</div>
