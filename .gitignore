@@ -1,0 +1,15 @@
+# .NET
+bin/
+obj/
+.vs/
+*.user
+
+# Angular / Node
+node_modules/
+.angular/
+dist/
+out-tsc/
+
+# Logs and secrets
+*.log
+appsettings.Development.json
