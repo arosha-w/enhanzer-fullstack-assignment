@@ -1,0 +1,10 @@
+:root {
+  --blue: #2f6fe4; --blue-dark: #1f4fb0; --text: #2b3445; --muted: #7b8499;
+  --border: #d9dde6; --bg: #f4f6fa; --danger: #d93025; --radius: 8px;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; font-family: 'Segoe UI', Roboto, Arial, sans-serif; color: var(--text); background: var(--bg); }
+button { font: inherit; cursor: pointer; }
+.error { color: var(--danger); font-size: 12px; }
+.spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: spin .7s linear infinite; vertical-align: -3px; }
+@keyframes spin { to { transform: rotate(360deg); } }
